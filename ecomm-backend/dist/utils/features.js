@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { myCache } from "../app.js";
+import { Product } from "../models/product.js";
 const connectDB = async () => {
     try {
         console.log("Attempting to connect to MongoDB...");
@@ -20,3 +22,27 @@ const connectDB = async () => {
     }
 };
 export default connectDB;
+export const invalidateCache = async ({ product, order, admin, productId, }) => {
+    if (product) {
+        const productKeys = [
+            "latest-products",
+            "categories",
+            "all-products",
+        ];
+        if (typeof productId === "string")
+            productKeys.push(`product-${productId}`);
+        if (typeof productId === "object")
+            productId.forEach((i) => productKeys.push(`product-${i}`));
+        await myCache.del(productKeys);
+    }
+};
+export const reduceStock = async (orderItems) => {
+    for (let i = 0; i < orderItems.length; i++) {
+        const order = orderItems[i];
+        const product = await Product.findById(order.productId);
+        if (!product)
+            throw new Error("Product Not Found");
+        product.stock -= order.quantity;
+        await product.save();
+    }
+};
