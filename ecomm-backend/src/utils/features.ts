@@ -28,6 +28,8 @@ export const invalidateCache = async ({
   order,
   admin,
   productId,
+  userId,
+  orderId,
 }: InvalidateCacheProps) => {
   if (product) {
     const productKeys: string[] = [
@@ -42,6 +44,15 @@ export const invalidateCache = async ({
       productId.forEach((i) => productKeys.push(`product-${i}`));
 
     await myCache.del(productKeys);
+  }
+  if (order) {
+    const ordersKeys: string[] = [
+      "all-orders",
+      `my-orders-${userId}`,
+      `order-${orderId}`,
+    ];
+
+    await myCache.del(ordersKeys);
   }
 };
 export const reduceStock = async (orderItems: OrderItemType[]) => {

@@ -22,7 +22,7 @@ const connectDB = async () => {
     }
 };
 export default connectDB;
-export const invalidateCache = async ({ product, order, admin, productId, }) => {
+export const invalidateCache = async ({ product, order, admin, productId, userId, orderId, }) => {
     if (product) {
         const productKeys = [
             "latest-products",
@@ -34,6 +34,14 @@ export const invalidateCache = async ({ product, order, admin, productId, }) => 
         if (typeof productId === "object")
             productId.forEach((i) => productKeys.push(`product-${i}`));
         await myCache.del(productKeys);
+    }
+    if (order) {
+        const ordersKeys = [
+            "all-orders",
+            `my-orders-${userId}`,
+            `order-${orderId}`,
+        ];
+        await myCache.del(ordersKeys);
     }
 };
 export const reduceStock = async (orderItems) => {
