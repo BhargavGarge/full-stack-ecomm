@@ -33,7 +33,7 @@ export const invalidateCache = async ({ product, order, admin, productId, userId
             productKeys.push(`product-${productId}`);
         if (typeof productId === "object")
             productId.forEach((i) => productKeys.push(`product-${i}`));
-        await myCache.del(productKeys);
+        myCache.del(productKeys);
     }
     if (order) {
         const ordersKeys = [
@@ -41,7 +41,7 @@ export const invalidateCache = async ({ product, order, admin, productId, userId
             `my-orders-${userId}`,
             `order-${orderId}`,
         ];
-        await myCache.del(ordersKeys);
+        myCache.del(ordersKeys);
     }
 };
 export const reduceStock = async (orderItems) => {
