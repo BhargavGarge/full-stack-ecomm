@@ -8,12 +8,15 @@ import connectDB from "./utils/features.js";
 import dotenv from "dotenv";
 import { errorMiddleware } from "./middleware/error.js";
 import NodeCache from "node-cache";
+import Stripe from "stripe";
 dotenv.config();
+connectDB();
+const stripeKey = process.env.STRIPE_SECRET_KEY || "";
+export const myCache = new NodeCache();
+export const strip = new Stripe(stripeKey);
 const app = express();
 app.use(express.json());
 const port = 3000;
-connectDB();
-export const myCache = new NodeCache();
 app.get("/", (req, res) => {
     res.send("Welcome to Ecomerce API");
 });

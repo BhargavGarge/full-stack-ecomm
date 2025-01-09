@@ -10,7 +10,7 @@ import {
 } from "../controllers/payment.js";
 
 const app = express.Router();
-
+app.post;
 app.post("/coupon/new", newCoupon as any);
 app.get("/discount", applyDiscount as any);
 app.get("/coupon/all", adminOnly as any, allCoupons as any);
